@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Bettor Profile — Dimes Vault</title>
+<meta name="description" content="15 questions. 3 minutes. Your betting personality, your kryptonite, and the rules that fix it.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0a0c10; --card:#12151c; --card2:#171b24; --line:#242a36;
+    --gold:#e8b84b; --gold-deep:#b3872a; --text:#e9eaec; --muted:#9aa1ac; --dim:#6b7280;
+    --danger:#e05c5c; --radius:14px;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{background:var(--bg); color:var(--text); font-family:'Inter',system-ui,sans-serif; line-height:1.6; min-height:100vh;}
+  .wrap{max-width:640px; margin:0 auto; padding:32px 20px 64px;}
+  .brand{display:flex; align-items:center; gap:10px; margin-bottom:40px;}
+  .brand-mark{width:34px; height:34px; border:2px solid var(--gold); border-radius:8px; display:flex; align-items:center; justify-content:center; font-family:'Barlow Condensed',sans-serif; font-weight:700; font-size:17px; color:var(--gold);}
+  .brand-name{font-family:'Barlow Condensed',sans-serif; font-weight:700; font-size:19px; letter-spacing:.14em; color:var(--gold);}
+  h1{font-family:'Barlow Condensed',sans-serif; font-weight:700; font-size:44px; line-height:1.08; letter-spacing:.01em; margin-bottom:16px;}
+  h2{font-family:'Barlow Condensed',sans-serif; font-weight:700; font-size:28px; line-height:1.15;}
+  .sub{color:var(--muted); font-size:17px; margin-bottom:28px; max-width:520px;}
+  .quote{border-left:3px solid var(--gold); padding:4px 0 4px 18px; margin:32px 0; color:var(--muted); font-size:15.5px; font-style:italic;}
+  .quote b{color:var(--text); font-style:normal;}
+  .btn{display:inline-block; background:var(--gold); color:#161206; border:none; border-radius:10px; padding:15px 34px; font-family:'Barlow Condensed',sans-serif; font-weight:700; font-size:19px; letter-spacing:.08em; cursor:pointer; text-decoration:none; transition:transform .1s, filter .15s;}
+  .btn:hover{filter:brightness(1.08);}
+  .btn:active{transform:scale(.98);}
+  .btn-ghost{display:inline-block; background:transparent; color:var(--muted); border:1px solid var(--line); border-radius:10px; padding:12px 22px; font-family:'Inter',sans-serif; font-weight:500; font-size:14px; cursor:pointer; transition:border-color .15s, color .15s;}
+  .btn-ghost:hover{border-color:var(--gold); color:var(--gold);}
+  .meta-row{display:flex; gap:24px; margin-top:26px; color:var(--dim); font-size:13.5px;}
+  .meta-row span{display:flex; align-items:center; gap:7px;}
+  .progress{height:5px; background:var(--card2); border-radius:99px; margin-bottom:14px; overflow:hidden;}
+  .progress i{display:block; height:100%; background:var(--gold); border-radius:99px; transition:width .3s ease;}
+  .qcount{color:var(--dim); font-size:13px; letter-spacing:.1em; text-transform:uppercase; margin-bottom:22px;}
+  .qtext{font-family:'Barlow Condensed',sans-serif; font-weight:600; font-size:27px; line-height:1.22; margin-bottom:26px;}
+  .opt{display:block; width:100%; text-align:left; background:var(--card); border:1px solid var(--line); border-radius:12px; padding:15px 18px; margin-bottom:11px; color:var(--text); font-family:'Inter',sans-serif; font-size:15.5px; line-height:1.5; cursor:pointer; transition:border-color .12s, background .12s;}
+  .opt:hover{border-color:var(--gold); background:var(--card2);}
+  .opt.picked{border-color:var(--gold); background:var(--card2);}
+  .back{background:none; border:none; color:var(--dim); font-size:14px; cursor:pointer; padding:8px 0; margin-top:6px;}
+  .back:hover{color:var(--muted);}
+  .arch-card{background:var(--card); border:1px solid var(--gold-deep); border-radius:var(--radius); padding:30px 28px; margin-bottom:28px;}
+  .arch-label{color:var(--gold); font-size:12.5px; letter-spacing:.18em; text-transform:uppercase; margin-bottom:10px;}
+  .arch-name{font-family:'Barlow Condensed',sans-serif; font-weight:700; font-size:46px; line-height:1; color:var(--gold); margin-bottom:8px;}
+  .arch-tag{color:var(--text); font-weight:600; font-size:17px; margin-bottom:14px;}
+  .arch-desc{color:var(--muted); font-size:15.5px;}
+  .section-h{font-family:'Barlow Condensed',sans-serif; font-weight:700; font-size:23px; letter-spacing:.04em; margin:34px 0 18px; display:flex; align-items:center; gap:10px;}
+  .section-h::after{content:''; flex:1; height:1px; background:var(--line);}
+  .trait{margin-bottom:20px;}
+  .trait-top{display:flex; justify-content:space-between; font-size:13px; color:var(--muted); margin-bottom:6px;}
+  .trait-top .hi{color:var(--text); font-weight:600;}
+  .trait-bar{position:relative; height:9px; background:var(--card2); border-radius:99px;}
+  .trait-fill{position:absolute; left:0; top:0; height:100%; background:var(--gold); border-radius:99px;}
+  .trait-fill.low{background:var(--danger);}
+  .trait-score{font-size:12px; color:var(--dim); margin-top:5px; text-align:right;}
+  .pp{background:var(--card); border:1px solid var(--line); border-left:3px solid var(--gold); border-radius:0 12px 12px 0; padding:18px 20px; margin-bottom:28px;}
+  .pp b{display:block; color:var(--gold); font-size:14px; letter-spacing:.06em; text-transform:uppercase; margin-bottom:6px;}
+  .pp p{color:var(--muted); font-size:14.5px;}
+  .kryp{background:var(--card); border:1px solid var(--line); border-left:3px solid var(--danger); border-radius:0 12px 12px 0; padding:18px 20px; margin-bottom:14px;}
+  .kryp b{display:block; color:var(--danger); font-size:14px; letter-spacing:.06em; text-transform:uppercase; margin-bottom:6px;}
+  .kryp p{color:var(--muted); font-size:14.5px;}
+  .kryp p strong{color:var(--text);}
+  .rule{display:flex; gap:14px; background:var(--card); border:1px solid var(--line); border-radius:12px; padding:16px 18px; margin-bottom:11px;}
+  .rule-n{flex-shrink:0; width:26px; height:26px; border-radius:50%; border:1.5px solid var(--gold); color:var(--gold); font-family:'Barlow Condensed',sans-serif; font-weight:700; font-size:14px; display:flex; align-items:center; justify-content:center; margin-top:2px;}
+  .rule p{color:var(--text); font-size:14.5px;}
+  .cta{background:var(--card); border:1px solid var(--gold-deep); border-radius:var(--radius); padding:28px; margin-top:40px; text-align:center;}
+  .cta h2{color:var(--gold); margin-bottom:10px;}
+  .cta p{color:var(--muted); font-size:15px; margin-bottom:20px; max-width:440px; margin-left:auto; margin-right:auto;}
+  .actions{display:flex; gap:12px; margin-top:26px; flex-wrap:wrap;}
+  .hidden{display:none;}
+  .fade{animation:fade .35s ease;}
+  @keyframes fade{from{opacity:0; transform:translateY(8px);} to{opacity:1; transform:none;}}
+  @media (max-width:480px){ h1{font-size:36px;} .qtext{font-size:23px;} .arch-name{font-size:38px;} }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="brand"><div class="brand-mark">DV</div><div class="brand-name"><span style="color:var(--text)">DIMES</span>VAULT</div></div>
+
+  <div id="screen-intro">
+    <h1>Know who you are when the games come on</h1>
+    <p class="sub">15 questions. 3 minutes. Your betting personality across six spectrums — plus your kryptonite, and the rules that beat it.</p>
+    <div class="quote">"The difference between dreams and reality is <b>the discipline to execute on the plan.</b>"</div>
+    <button class="btn" onclick="startQuiz()">Find my profile →</button>
+    <div class="meta-row"><span>⏱ ~3 minutes</span><span>🔒 Nothing to sign up for</span><span>📊 Instant results</span></div>
+  </div>
+
+  <div id="screen-quiz" class="hidden">
+    <div class="progress"><i id="prog-fill" style="width:0%"></i></div>
+    <div class="qcount" id="qcount"></div>
+    <div id="qbody"></div>
+    <button class="back" id="btn-back" onclick="goBack()">← Back</button>
+  </div>
+
+  <div id="screen-results" class="hidden"></div>
+</div>
+
+<script>
+const SKOOL_URL = "https://www.skool.com/dimesvault/about";
+
+const TRAITS = {
+  discipline:{name:"Discipline", lo:"Impulsive", hi:"Disciplined"},
+  tilt:{name:"Tilt control", lo:"Tilt-prone", hi:"Ice-cold"},
+  patience:{name:"Patience", lo:"Action junkie", hi:"Sniper patience"},
+  conviction:{name:"Decisiveness", lo:"Second-guesser", hi:"Decisive"},
+  process:{name:"Process", lo:"Winging it", hi:"Systematic"},
+  adapt:{name:"Adaptability", lo:"Stubborn", hi:"Adaptable"}
+};
+
+const KRYPTONITE = {
+  discipline:"Your bets outrun your plan. In the moment, every bet feels like the exception — it never is. <strong>Hard rule: no bet that wasn't on your card before the day started.</strong>",
+  tilt:"Losses change your behavior. One bad beat and the next bet is revenge, not strategy. <strong>Hard rule: after any loss that stings, a 30-minute timer before the next bet.</strong>",
+  patience:"You need action more than you need wins, and boredom is your most expensive emotion. <strong>Hard rule: set a max number of bets per week — in advance, in writing.</strong>",
+  conviction:"You do the work, then talk yourself out of the number. Missed value is a real cost. <strong>Hard rule: if the play checks your boxes, it gets bet within 5 minutes.</strong>",
+  process:"No tracking means no feedback loop — you literally can't know what's working. <strong>Hard rule: every bet gets logged before it settles. No exceptions.</strong>",
+  adapt:"You marry your opinions, and new information bounces off you. <strong>Hard rule: before you bet, write down what would change your mind.</strong>"
+};
+
+const ARCHETYPES = {
+  sniper:{name:"The Sniper", icon:"🎯", tag:"You wait. Then you strike.",
+    pp:"You're already wired for it. The Perfect Play is a waiting game, and waiting is your superpower — the system just gives your patience a target.",
+    desc:"You're the rare bettor who treats no-bet as a position. You don't need action to enjoy the games, and your sizing doesn't move with your mood. This is the profile every system is trying to build — your job now is simply to protect it.",
+    rules:["Keep a record of the bets you didn't make. Passing has value — prove it to yourself on paper.","Guard your environment: mute the touts, the group-chat locks, the live-line push alerts.","When you do fire, fire full size. Snipers don't half-pull triggers."]},
+  grinder:{name:"The Grinder", icon:"📈", tag:"Steady beats spectacular.",
+    pp:"The Perfect Play is your filter. Your process is solid — the system's job is to cut your bet count down to only the spots that clear the audit.",
+    desc:"You've got a process and you mostly follow it. No single trait dominates you — which means no single trait sinks you. Your edge compounds quietly: tracking, unit discipline, and small consistent improvements.",
+    rules:["Review your log monthly and cut your worst-performing bet type. Pruning is where grinders find ROI.","Pick your weakest spectrum below and make it the only thing you work on this season.","Don't envy the hot streaks around you. Volatility is loud; compounding is quiet."]},
+  chaser:{name:"The Chaser", icon:"🔥", tag:"The loss decides your next bet.",
+    pp:"The Perfect Play only works if you take it when it fires — not stacked on top of three revenge bets. Your risk isn't missing the play; it's burying it.",
+    desc:"When you're down, the money stops being units and becomes a score to settle. The bet right after a loss is your most dangerous moment — it's bigger, faster, and worse-researched than any other bet you make.",
+    rules:["Set a hard daily stop-loss, in writing, and tell someone who'll hold you to it.","After any loss: mandatory 30-minute gap before the next bet. Set an actual timer.","Never size up to 'get back to even.' Even is a mirage; the plan is the destination."]},
+  gunslinger:{name:"The Gunslinger", icon:"⚡", tag:"First to fire, last to wait.",
+    pp:"The Perfect Play is a waiting game — and waiting is your weak side. Your risk: firing at ten 'pretty good' plays before the perfect one ever arrives.",
+    desc:"You're decisive — that's real, and it's valuable. But you fire at everything that moves, and volume is where your bankroll leaks. Your wins come from the same trigger-pull as your losses; the difference is selection.",
+    rules:["Cap your weekly bet count in advance. Your talent is the trigger; your job is the holster.","Before every bet, name the edge out loud. 'I like them' is not an edge.","Track ROI on your quick-trigger bets vs. your planned bets — let the data cool your hand."]},
+  professor:{name:"The Professor", icon:"📚", tag:"Right about everything except pulling the trigger.",
+    pp:"The Perfect Play does the deciding for you — the criteria are set before game day. Your risk: second-guessing the trigger in the one moment it asks you to pull it.",
+    desc:"Your analysis is better than most people's — and your bet slip doesn't show it. You re-check, second-guess, and watch the number you wanted disappear. The market pays for conclusions, not research.",
+    rules:["Define 'done' before you start. When the checklist is complete, the bet goes in — no extra lap.","Bet within 5 minutes of finishing the work, at the current number, if it still qualifies.","Size down if you must, but bet. A half-unit executed edge beats a two-unit hypothetical every week."]},
+  rollercoaster:{name:"The Rollercoaster", icon:"🎢", tag:"Your mood is your bankroll's biggest variable.",
+    pp:"The Perfect Play doesn't care how your week is going. Your risk: sizing it by mood — big when you're hot, scared money when you're not — instead of by plan.",
+    desc:"You can be disciplined — until the emotional weather changes. Wins make you invincible, losses make it personal, and your bet sizing tells the story of your last three results. The swings feel like passion; they price like leakage.",
+    rules:["Fix your unit size on a calm weekday. It is unchangeable on game day.","One-line journal before each bet: mood, 1–10. At 8+ or 3-or-below, skip the bet.","Build a post-loss ritual that isn't betting — walk, shower, anything with a door between you and the app."]}
+};
+
+const QUESTIONS = [
+  {t:"discipline", q:"It's 7:58 on Sunday night. You have no bet on the night game and kickoff is in two minutes.", o:[
+    ["I'm firing something in before kickoff — can't watch a game with nothing on it.",0],
+    ["I scan the live lines for a few minutes. I usually find something.",1],
+    ["I might sprinkle something small if a number looks off.",2],
+    ["Nothing. No edge, no bet. I just watch the game.",3]]},
+  {t:"tilt", q:"You lose a bet on a meaningless garbage-time touchdown. The next 30 minutes look like:", o:[
+    ["Reloading and firing at the first live line I see.",0],
+    ["Furious. Texting everyone about the bad beat.",1],
+    ["Annoyed, but I close the app and cool off.",2],
+    ["That's variance. The result changed nothing about the process.",3]]},
+  {t:"patience", q:"How many games can you watch in a full weekend without betting a single one of them?", o:[
+    ["Zero. A game without a bet is unwatchable.",0],
+    ["One, maybe two.",1],
+    ["Most of them — but a full card with no action is hard.",2],
+    ["All of them. Betting is for edges; watching is for fun.",3]]},
+  {t:"conviction", q:"You did the work and the play checks every box. The number is available right now.", o:[
+    ["I hesitate, re-run everything, and often watch the number disappear.",0],
+    ["I ask a couple of guys what they think first.",1],
+    ["I sit with it a bit, then usually pull the trigger.",2],
+    ["Bet placed. The work was the decision.",3]]},
+  {t:"process", q:"Where do your bets live?", o:[
+    ["Nowhere. It's vibes and memory.",0],
+    ["A rough mental tally — I basically know if I'm up.",1],
+    ["My sportsbook history. I check it sometimes.",2],
+    ["A tracker. Every bet logged with size, number, and result.",3]]},
+  {t:"adapt", q:"An hour before kickoff, your QB's top target is a surprise scratch. You already bet the over.", o:[
+    ["Doesn't matter. The bet's in — ride it.",0],
+    ["I grumble about it but never actually adjust.",1],
+    ["I re-evaluate sometimes, if the news feels big enough.",2],
+    ["I re-run the play with the new info. Hedge or hold — but I decide fresh.",3]]},
+  {t:"discipline", q:"Your plan says 1 unit max on this play, but you're feeling great about it. You bet:", o:[
+    ["3+ units. When you know, you know.",0],
+    ["2 units. Confidence deserves a bump.",1],
+    ["1.5 units. Close enough.",2],
+    ["1 unit. The plan is the plan.",3]]},
+  {t:"tilt", q:"You're down 4 units on the day and the Sunday night game is all that's left.", o:[
+    ["Double up on the night game. Get it all back.",0],
+    ["Bigger bet than usual — I need to make a dent.",1],
+    ["Normal-size bet, but only if I already liked something.",2],
+    ["The day's result doesn't change the night's plan. No play means no play.",3]]},
+  {t:"patience", q:"The number you wanted moved from -3 to -4.5 before you got your bet in.", o:[
+    ["Bet it anyway. The pick's the pick.",0],
+    ["Bet it, but smaller.",1],
+    ["Wait for it to come back, get antsy, usually cave.",2],
+    ["The play was -3. At -4.5, the play doesn't exist.",3]]},
+  {t:"conviction", q:"After you place a bet, how often do you hedge or cash out early because you got nervous?", o:[
+    ["Almost every bet. I cash out constantly.",0],
+    ["Often, when it gets tight late.",1],
+    ["Rarely — only in genuinely weird spots.",2],
+    ["Basically never. I let the play breathe.",3]]},
+  {t:"process", q:"Do you know your actual record and ROI over the last three months?", o:[
+    ["No idea. Feels like I'm about even?",0],
+    ["I know if I'm up or down. Roughly.",1],
+    ["Ballpark units — I could pull it up.",2],
+    ["Exact record, exact units, and where my losses cluster.",3]]},
+  {t:"adapt", q:"Your favorite betting angle went 2–14 this season.", o:[
+    ["Keep firing. It always comes back.",0],
+    ["Blame variance. Change nothing.",1],
+    ["Bet it smaller while I figure it out.",2],
+    ["Dig into why it broke — and retire it if the edge is gone.",3]]},
+  {t:"discipline", q:"A friend texts you a 'lock' 10 minutes before kickoff. No time to verify it.", o:[
+    ["Tail instantly. He's been hot.",0],
+    ["Tail it half-size.",1],
+    ["Look at it for five minutes. Usually pass.",2],
+    ["Pass. I don't bet what I haven't verified.",3]]},
+  {t:"tilt", q:"You're on a heater — five straight wins. What changes?", o:[
+    ["Everything. I press the wave with bigger bets.",0],
+    ["I bet more games than usual and sizes creep up.",1],
+    ["Sizes stay the same, but I feel bulletproof.",2],
+    ["Nothing. A winning streak doesn't make the next bet better.",3]]},
+  {t:"patience", q:"It's a dead Tuesday in July. No football for weeks.", o:[
+    ["I find action anywhere. Table tennis, whatever's live.",0],
+    ["I'll bet a sport I barely follow just to have a sweat.",1],
+    ["Mostly abstain, with a rare small one.",2],
+    ["I don't bet. The off-season is for studying, not donating.",3]]}
+];
+
+let idx = 0;
+let answers = new Array(QUESTIONS.length).fill(null);
+
+function show(id){
+  for (const s of ["screen-intro","screen-quiz","screen-results"])
+    document.getElementById(s).classList.toggle("hidden", s !== id);
+  window.scrollTo({top:0});
+}
+function startQuiz(){ idx = 0; answers.fill(null); show("screen-quiz"); renderQ(); }
+function renderQ(){
+  const q = QUESTIONS[idx];
+  document.getElementById("prog-fill").style.width = (idx / QUESTIONS.length * 100) + "%";
+  document.getElementById("qcount").textContent = "Question " + (idx+1) + " of " + QUESTIONS.length;
+  document.getElementById("btn-back").style.visibility = idx === 0 ? "hidden" : "visible";
+  const body = document.getElementById("qbody");
+  body.innerHTML = "";
+  body.className = "fade";
+  const h = document.createElement("div"); h.className = "qtext"; h.textContent = q.q; body.appendChild(h);
+  q.o.forEach((opt, i) => {
+    const b = document.createElement("button");
+    b.className = "opt" + (answers[idx] === i ? " picked" : "");
+    b.textContent = opt[0];
+    b.onclick = () => { answers[idx] = i; b.classList.add("picked"); setTimeout(next, 180); };
+    body.appendChild(b);
+  });
+  void body.offsetWidth;
+}
+function next(){ if (idx < QUESTIONS.length - 1){ idx++; renderQ(); } else finish(); }
+function goBack(){ if (idx > 0){ idx--; renderQ(); } }
+
+function scoreTraits(){
+  const sum = {}, max = {};
+  QUESTIONS.forEach((q, i) => {
+    sum[q.t] = (sum[q.t] || 0) + q.o[answers[i]][1];
+    max[q.t] = (max[q.t] || 0) + 3;
+  });
+  const s = {};
+  for (const t in sum) s[t] = Math.round(sum[t] / max[t] * 100);
+  return s;
+}
+function pickArchetype(s){
+  if (s.discipline >= 72 && s.patience >= 72 && s.tilt >= 60) return "sniper";
+  if (s.tilt <= 40 && s.discipline <= 50) return "chaser";
+  if (s.tilt <= 40) return "rollercoaster";
+  if (s.conviction >= 70 && (s.patience <= 45 || s.discipline <= 50)) return "gunslinger";
+  if (s.conviction <= 45 && s.process >= 55) return "professor";
+  return "grinder";
+}
+
+function finish(){
+  document.getElementById("prog-fill").style.width = "100%";
+  const s = scoreTraits();
+  const a = ARCHETYPES[pickArchetype(s)];
+  const weakest = Object.keys(s).sort((x,y) => s[x] - s[y]).filter(t => s[t] < 60).slice(0,2);
+
+  let html = '<div class="fade">';
+  html += '<div class="arch-card"><div class="arch-label">Your bettor profile</div>';
+  html += '<div class="arch-name">' + a.icon + ' ' + a.name + '</div>';
+  html += '<div class="arch-tag">' + a.tag + '</div>';
+  html += '<div class="arch-desc">' + a.desc + '</div></div>';
+
+  html += '<div class="pp"><b>You vs. The Perfect Play</b><p>' + a.pp + '</p></div>';
+
+  html += '<div class="section-h">Your six spectrums</div>';
+  for (const t in TRAITS){
+    const low = weakest.includes(t);
+    html += '<div class="trait"><div class="trait-top"><span>' + TRAITS[t].lo + '</span><span class="hi">' + TRAITS[t].hi + '</span></div>';
+    html += '<div class="trait-bar"><div class="trait-fill' + (low ? ' low' : '') + '" style="width:' + s[t] + '%"></div></div>';
+    html += '<div class="trait-score">' + TRAITS[t].name + ' — ' + s[t] + '/100' + (low ? ' ⚠' : '') + '</div></div>';
+  }
+
+  html += '<div class="section-h">Your kryptonite</div>';
+  if (weakest.length === 0){
+    html += '<div class="kryp" style="border-left-color:var(--gold)"><b style="color:var(--gold)">No glaring leaks</b><p>No spectrum came back in the danger zone. Your kryptonite is complacency — profiles drift when nobody\'s watching. Retake this after your next losing week and compare.</p></div>';
+  } else {
+    weakest.forEach(t => {
+      html += '<div class="kryp"><b>' + TRAITS[t].name + ' — ' + s[t] + '/100</b><p>' + KRYPTONITE[t] + '</p></div>';
+    });
+  }
+
+  html += '<div class="section-h">Your game plan</div>';
+  a.rules.forEach((r, i) => {
+    html += '<div class="rule"><div class="rule-n">' + (i+1) + '</div><p>' + r + '</p></div>';
+  });
+
+  html += '<div class="cta"><h2>Your profile is the diagnosis. The Perfect Play is the plan.</h2>';
+  html += '<p>Inside the DimesVault community: The Perfect Play strategy start to finish, the plays that fit the audit, the unit calculator — and the receipts to prove it. Drop your archetype in the chat when you land.</p>';
+  html += '<a class="btn" href="' + SKOOL_URL + '">Join the Vault →</a></div>';
+
+  html += '<div class="actions"><button class="btn-ghost" onclick="copyResults()">Copy my results</button>';
+  html += '<button class="btn-ghost" onclick="startQuiz()">Retake</button></div></div>';
+
+  document.getElementById("screen-results").innerHTML = html;
+  show("screen-results");
+  window._lastResults = {s, a};
+}
+
+function copyResults(){
+  const {s, a} = window._lastResults;
+  const lines = ["My bettor profile: " + a.name.toUpperCase() + " " + a.icon, ""];
+  for (const t in TRAITS) lines.push(TRAITS[t].name + ": " + s[t] + "/100");
+  lines.push("", '"' + a.tag + '"', "", "Find yours: " + window.location.href);
+  navigator.clipboard.writeText(lines.join("\n")).then(() => {
+    const b = document.querySelector(".actions .btn-ghost");
+    const old = b.textContent; b.textContent = "Copied ✓";
+    setTimeout(() => b.textContent = old, 1600);
+  });
+}
+</script>
+</body>
+</html>
