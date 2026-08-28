@@ -472,9 +472,9 @@ function skoolUrl(){ return refCode ? SKOOL_URL + "?ref=" + encodeURIComponent(r
   } catch(e){}
 
   try {
+    localStorage.removeItem("dv_aud");
     const av = (new URLSearchParams(window.location.search).get("v") || "").toLowerCase();
-    if (av === "pp" || av === "member") { aud = av; localStorage.setItem("dv_aud", av); }
-    else { const sv = localStorage.getItem("dv_aud"); if (sv === "pp" || sv === "member") aud = sv; }
+    if (av === "pp" || av === "member") aud = av;
   } catch(e){}
 })();
 
