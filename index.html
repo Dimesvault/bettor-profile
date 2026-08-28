@@ -5,6 +5,15 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>The Bettor Profile — Dimes Vault</title>
 <meta name="description" content="15 questions. 3 minutes. Your betting personality, your kryptonite, and the rules that fix it.">
+<meta property="og:title" content="The Bettor Profile — Know who you are when the games come on">
+<meta property="og:description" content="15 questions. 3 minutes. Your betting personality, your kryptonite, and the rules that fix it.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://bettor-profile.vercel.app/">
+<meta property="og:image" content="https://bettor-profile.vercel.app/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="The Bettor Profile — Know who you are when the games come on">
+<meta name="twitter:description" content="15 questions. 3 minutes. Your betting personality, your kryptonite, and the rules that fix it.">
+<meta name="twitter:image" content="https://bettor-profile.vercel.app/og.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
@@ -17,7 +26,7 @@
   *{box-sizing:border-box; margin:0; padding:0;}
   body{background:var(--bg); color:var(--text); font-family:'Inter',system-ui,sans-serif; line-height:1.6; min-height:100vh;}
   .wrap{max-width:640px; margin:0 auto; padding:32px 20px 64px;}
-  .brand{display:flex; align-items:center; justify-content:center; gap:10px; margin-bottom:40px;}
+  .brand{display:flex; align-items:center; justify-content:center; gap:10px; margin-bottom:40px; cursor:pointer;}
   .brand-mark{width:34px; height:34px; border:2px solid var(--gold); border-radius:8px; display:flex; align-items:center; justify-content:center; font-family:'Barlow Condensed',sans-serif; font-weight:700; font-size:17px; color:var(--gold);}
   .brand-name{font-family:'Barlow Condensed',sans-serif; font-weight:700; font-size:19px; letter-spacing:.14em; color:var(--gold);}
   h1{font-family:'Barlow Condensed',sans-serif; font-weight:700; font-size:44px; line-height:1.08; letter-spacing:.01em; margin-bottom:16px;}
@@ -33,6 +42,11 @@
   .btn:active{transform:scale(.98);}
   .btn-ghost{display:inline-block; background:transparent; color:var(--muted); border:1px solid var(--line); border-radius:10px; padding:12px 22px; font-family:'Inter',sans-serif; font-weight:500; font-size:14px; cursor:pointer; transition:border-color .15s, color .15s;}
   .btn-ghost:hover{border-color:var(--gold); color:var(--gold);}
+  .btn-outline{display:inline-block; background:transparent; color:var(--gold); border:1.5px solid var(--gold); border-radius:10px; padding:13px 28px; font-family:'Barlow Condensed',sans-serif; font-weight:700; font-size:17px; letter-spacing:.07em; text-decoration:none; transition:background .15s;}
+  .btn-outline:hover{background:rgba(232,184,75,.12);}
+  @keyframes ctapulse{0%{box-shadow:0 0 0 0 rgba(232,184,75,.55);}70%{box-shadow:0 0 0 18px rgba(232,184,75,0);}100%{box-shadow:0 0 0 0 rgba(232,184,75,0);}}
+  .cta .btn{animation:ctapulse 2.2s ease-out infinite;}
+  @media (prefers-reduced-motion:reduce){.cta .btn{animation:none;}}
   .meta-row{display:flex; gap:24px; margin-top:26px; color:var(--dim); font-size:13.5px; justify-content:center; flex-wrap:wrap;}
   .meta-row span{display:flex; align-items:center; gap:7px;}
   .progress{height:5px; background:var(--card2); border-radius:99px; margin-bottom:14px; overflow:hidden;}
@@ -80,13 +94,14 @@
 </head>
 <body>
 <div class="wrap">
-  <div class="brand"><div class="brand-mark">DV</div><div class="brand-name"><span style="color:var(--text)">DIMES</span>VAULT</div></div>
+  <div class="brand" onclick="goHome()" title="Back to start"><div class="brand-mark">DV</div><div class="brand-name"><span style="color:var(--text)">DIMES</span>VAULT</div></div>
 
   <div id="screen-intro">
     <h1>Know who you are when the games come on</h1>
     <p class="sub">15 questions. 3 minutes. Your betting personality across six spectrums — plus your kryptonite, and the rules that beat it.</p>
     <div class="quote">"The difference between dreams and reality is <b>the discipline to execute on the plan.</b>"</div>
     <button class="btn" onclick="startQuiz()">Find my profile →</button>
+    <div style="margin-top:16px;"><a class="btn-outline" href="https://dimesvault.com/">Get the plays in your inbox — free at DimesVault.com</a></div>
     <div class="meta-row"><span>⏱ ~3 minutes</span><span>🔒 Nothing to sign up for</span><span>📊 Instant results</span></div>
   </div>
 
@@ -315,21 +330,44 @@ function finish(){
   html += '<p>Inside the DimesVault community: The Perfect Play strategy start to finish, the plays that fit the audit, the unit calculator — and the receipts to prove it. Drop your archetype in the chat when you land.</p>';
   html += '<a class="btn" href="' + SKOOL_URL + '">Join the Vault →</a></div>';
 
-  html += '<div class="actions"><button class="btn-ghost" onclick="copyResults()">Copy my results</button>';
+  html += '<div class="section-h">Share your archetype</div>';
+  html += '<div class="actions">';
+  html += '<button class="btn" id="btn-share" onclick="shareResults()">Share my profile</button>';
+  html += '<button class="btn-ghost" onclick="shareTo(\'x\')">Post on X</button>';
+  html += '<button class="btn-ghost" onclick="shareTo(\'fb\')">Facebook</button>';
+  html += '<button class="btn-ghost" id="btn-copy" onclick="copyResults()">Copy my results</button>';
   html += '<button class="btn-ghost" onclick="startQuiz()">Retake</button></div></div>';
 
   document.getElementById("screen-results").innerHTML = html;
   show("screen-results");
   window._lastResults = {s, a};
+  if (!navigator.share) document.getElementById("btn-share").style.display = "none";
+}
+
+function goHome(){ show("screen-intro"); }
+function shareUrl(){ return window.location.origin + window.location.pathname; }
+function shareMsg(){
+  const {a} = window._lastResults;
+  return 'I just found my bettor profile: ' + a.name.toUpperCase() + ' ' + a.icon + ' — "' + a.tag + '" Find yours in 3 minutes.';
+}
+function shareResults(){
+  navigator.share({title:"The Bettor Profile", text:shareMsg(), url:shareUrl()}).catch(function(){});
+}
+function shareTo(p){
+  const links = {
+    x: "https://twitter.com/intent/tweet?text=" + encodeURIComponent(shareMsg()) + "&url=" + encodeURIComponent(shareUrl()),
+    fb: "https://www.facebook.com/sharer/sharer.php?u=" + encodeURIComponent(shareUrl()) + "&quote=" + encodeURIComponent(shareMsg())
+  };
+  window.open(links[p], "_blank", "noopener");
 }
 
 function copyResults(){
   const {s, a} = window._lastResults;
   const lines = ["My bettor profile: " + a.name.toUpperCase() + " " + a.icon, ""];
   for (const t in TRAITS) lines.push(TRAITS[t].name + ": " + s[t] + "/100");
-  lines.push("", '"' + a.tag + '"', "", "Find yours: " + window.location.href);
+  lines.push("", '"' + a.tag + '"', "", "Find yours: " + shareUrl());
   navigator.clipboard.writeText(lines.join("\n")).then(() => {
-    const b = document.querySelector(".actions .btn-ghost");
+    const b = document.getElementById("btn-copy");
     const old = b.textContent; b.textContent = "Copied ✓";
     setTimeout(() => b.textContent = old, 1600);
   });
