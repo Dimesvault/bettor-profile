@@ -17,26 +17,29 @@
   *{box-sizing:border-box; margin:0; padding:0;}
   body{background:var(--bg); color:var(--text); font-family:'Inter',system-ui,sans-serif; line-height:1.6; min-height:100vh;}
   .wrap{max-width:640px; margin:0 auto; padding:32px 20px 64px;}
-  .brand{display:flex; align-items:center; gap:10px; margin-bottom:40px;}
+  .brand{display:flex; align-items:center; justify-content:center; gap:10px; margin-bottom:40px;}
   .brand-mark{width:34px; height:34px; border:2px solid var(--gold); border-radius:8px; display:flex; align-items:center; justify-content:center; font-family:'Barlow Condensed',sans-serif; font-weight:700; font-size:17px; color:var(--gold);}
   .brand-name{font-family:'Barlow Condensed',sans-serif; font-weight:700; font-size:19px; letter-spacing:.14em; color:var(--gold);}
   h1{font-family:'Barlow Condensed',sans-serif; font-weight:700; font-size:44px; line-height:1.08; letter-spacing:.01em; margin-bottom:16px;}
   h2{font-family:'Barlow Condensed',sans-serif; font-weight:700; font-size:28px; line-height:1.15;}
   .sub{color:var(--muted); font-size:17px; margin-bottom:28px; max-width:520px;}
-  .quote{border-left:3px solid var(--gold); padding:4px 0 4px 18px; margin:32px 0; color:var(--muted); font-size:15.5px; font-style:italic;}
+  #screen-intro{text-align:center;}
+  #screen-intro .sub{margin-left:auto; margin-right:auto;}
+  .quote{max-width:480px; margin:32px auto; color:var(--muted); font-size:15.5px; font-style:italic;}
+  .quote::before{content:''; display:block; width:44px; height:2px; background:var(--gold); margin:0 auto 14px;}
   .quote b{color:var(--text); font-style:normal;}
   .btn{display:inline-block; background:var(--gold); color:#161206; border:none; border-radius:10px; padding:15px 34px; font-family:'Barlow Condensed',sans-serif; font-weight:700; font-size:19px; letter-spacing:.08em; cursor:pointer; text-decoration:none; transition:transform .1s, filter .15s;}
   .btn:hover{filter:brightness(1.08);}
   .btn:active{transform:scale(.98);}
   .btn-ghost{display:inline-block; background:transparent; color:var(--muted); border:1px solid var(--line); border-radius:10px; padding:12px 22px; font-family:'Inter',sans-serif; font-weight:500; font-size:14px; cursor:pointer; transition:border-color .15s, color .15s;}
   .btn-ghost:hover{border-color:var(--gold); color:var(--gold);}
-  .meta-row{display:flex; gap:24px; margin-top:26px; color:var(--dim); font-size:13.5px;}
+  .meta-row{display:flex; gap:24px; margin-top:26px; color:var(--dim); font-size:13.5px; justify-content:center; flex-wrap:wrap;}
   .meta-row span{display:flex; align-items:center; gap:7px;}
   .progress{height:5px; background:var(--card2); border-radius:99px; margin-bottom:14px; overflow:hidden;}
   .progress i{display:block; height:100%; background:var(--gold); border-radius:99px; transition:width .3s ease;}
   .qcount{color:var(--dim); font-size:13px; letter-spacing:.1em; text-transform:uppercase; margin-bottom:22px;}
   .qtext{font-family:'Barlow Condensed',sans-serif; font-weight:600; font-size:27px; line-height:1.22; margin-bottom:26px;}
-  .opt{display:block; width:100%; text-align:left; background:var(--card); border:1px solid var(--line); border-radius:12px; padding:15px 18px; margin-bottom:11px; color:var(--text); font-family:'Inter',sans-serif; font-size:15.5px; line-height:1.5; cursor:pointer; transition:border-color .12s, background .12s;}
+  .opt{display:block; width:100%; text-align:center; background:var(--card); border:1px solid var(--line); border-radius:12px; padding:15px 18px; margin-bottom:11px; color:var(--text); font-family:'Inter',sans-serif; font-size:15.5px; line-height:1.5; cursor:pointer; transition:border-color .12s, background .12s;}
   .opt:hover{border-color:var(--gold); background:var(--card2);}
   .opt.picked{border-color:var(--gold); background:var(--card2);}
   .back{background:none; border:none; color:var(--dim); font-size:14px; cursor:pointer; padding:8px 0; margin-top:6px;}
@@ -126,7 +129,7 @@ const ARCHETYPES = {
   grinder:{name:"The Grinder", icon:"📈", tag:"Steady beats spectacular.",
     pp:"The Perfect Play is your filter. Your process is solid — the system's job is to cut your bet count down to only the spots that clear the audit.",
     desc:"You've got a process and you mostly follow it. No single trait dominates you — which means no single trait sinks you. Your edge compounds quietly: tracking, unit discipline, and small consistent improvements.",
-    rules:["Review your log monthly and cut your worst-performing bet type. Pruning is where grinders find ROI.","Pick your weakest spectrum below and make it the only thing you work on this season.","Don't envy the hot streaks around you. Volatility is loud; compounding is quiet."]},
+    rules:["Review your log monthly and cut your worst-performing bet type. Pruning is where grinders find ROI.","Pick your weakest spectrum above and make it the only thing you work on this season.","Don't envy the hot streaks around you. Volatility is loud; compounding is quiet."]},
   chaser:{name:"The Chaser", icon:"🔥", tag:"The loss decides your next bet.",
     pp:"The Perfect Play only works if you take it when it fires — not stacked on top of three revenge bets. Your risk isn't missing the play; it's burying it.",
     desc:"When you're down, the money stops being units and becomes a score to settle. The bet right after a loss is your most dangerous moment — it's bigger, faster, and worse-researched than any other bet you make.",
@@ -146,32 +149,32 @@ const ARCHETYPES = {
 };
 
 const QUESTIONS = [
-  {t:"discipline", q:"It's 7:58 on Sunday night. You have no bet on the night game and kickoff is in two minutes.", o:[
+  {t:"discipline", q:"It's 8:18 p.m. ET on Sunday night. You have no bet on the game, and kickoff is in two minutes.", o:[
     ["I'm firing something in before kickoff — can't watch a game with nothing on it.",0],
     ["I scan the live lines for a few minutes. I usually find something.",1],
     ["I might sprinkle something small if a number looks off.",2],
     ["Nothing. No edge, no bet. I just watch the game.",3]]},
-  {t:"tilt", q:"You lose a bet on a meaningless garbage-time touchdown. The next 30 minutes look like:", o:[
-    ["Reloading and firing at the first live line I see.",0],
-    ["Furious. Texting everyone about the bad beat.",1],
-    ["Annoyed, but I close the app and cool off.",2],
-    ["That's variance. The result changed nothing about the process.",3]]},
-  {t:"patience", q:"How many games can you watch in a full weekend without betting a single one of them?", o:[
+  {t:"tilt", q:"A meaningless touchdown in the final minute causes your bet to lose. What do you do next?", o:[
+    ["Reload and fire at the first live line I see.",0],
+    ["Find another bet pretty fast — a 30-second glance counts as research, right?",1],
+    ["Step away for a bit. I only bet again if a genuinely strong spot shows up.",2],
+    ["I'm done for the night. That's variance — it changed nothing about the process.",3]]},
+  {t:"patience", q:"How many games can you watch in a single weekend without betting on one of them?", o:[
     ["Zero. A game without a bet is unwatchable.",0],
     ["One, maybe two.",1],
     ["Most of them — but a full card with no action is hard.",2],
     ["All of them. Betting is for edges; watching is for fun.",3]]},
-  {t:"conviction", q:"You did the work and the play checks every box. The number is available right now.", o:[
+  {t:"conviction", q:"You've run your analysis, the bet checks every box, and the line you want is still available. What do you do?", o:[
     ["I hesitate, re-run everything, and often watch the number disappear.",0],
     ["I ask a couple of guys what they think first.",1],
     ["I sit with it a bit, then usually pull the trigger.",2],
-    ["Bet placed. The work was the decision.",3]]},
+    ["I place the bet right away — the analysis already made the decision.",3]]},
   {t:"process", q:"Where do your bets live?", o:[
     ["Nowhere. It's vibes and memory.",0],
     ["A rough mental tally — I basically know if I'm up.",1],
     ["My sportsbook history. I check it sometimes.",2],
     ["A tracker. Every bet logged with size, number, and result.",3]]},
-  {t:"adapt", q:"An hour before kickoff, your QB's top target is a surprise scratch. You already bet the over.", o:[
+  {t:"adapt", q:"An hour before kickoff, your quarterback's top receiver is unexpectedly ruled out. You've already bet the over. What do you do?", o:[
     ["Doesn't matter. The bet's in — ride it.",0],
     ["I grumble about it but never actually adjust.",1],
     ["I re-evaluate sometimes, if the news feels big enough.",2],
@@ -192,7 +195,7 @@ const QUESTIONS = [
     ["Wait for it to come back, get antsy, usually cave.",2],
     ["The play was -3. At -4.5, the play doesn't exist.",3]]},
   {t:"conviction", q:"After you place a bet, how often do you hedge or cash out early because you got nervous?", o:[
-    ["Almost every bet. I cash out constantly.",0],
+    ["Almost every bet. The cash-out button and I are way too close.",0],
     ["Often, when it gets tight late.",1],
     ["Rarely — only in genuinely weird spots.",2],
     ["Basically never. I let the play breathe.",3]]},
@@ -201,23 +204,23 @@ const QUESTIONS = [
     ["I know if I'm up or down. Roughly.",1],
     ["Ballpark units — I could pull it up.",2],
     ["Exact record, exact units, and where my losses cluster.",3]]},
-  {t:"adapt", q:"Your favorite betting angle went 2–14 this season.", o:[
+  {t:"adapt", q:"Your go-to betting strategy — an angle you've relied on repeatedly — has gone 2–14 this season. What do you do?", o:[
     ["Keep firing. It always comes back.",0],
     ["Blame variance. Change nothing.",1],
     ["Bet it smaller while I figure it out.",2],
     ["Dig into why it broke — and retire it if the edge is gone.",3]]},
   {t:"discipline", q:"A friend texts you a 'lock' 10 minutes before kickoff. No time to verify it.", o:[
-    ["Tail instantly. He's been hot.",0],
+    ["Tail instantly. He's been hot — who am I to argue with a heater?",0],
     ["Tail it half-size.",1],
     ["Look at it for five minutes. Usually pass.",2],
     ["Pass. I don't bet what I haven't verified.",3]]},
   {t:"tilt", q:"You're on a heater — five straight wins. What changes?", o:[
-    ["Everything. I press the wave with bigger bets.",0],
+    ["Everything. I ride the heater and start betting bigger.",0],
     ["I bet more games than usual and sizes creep up.",1],
     ["Sizes stay the same, but I feel bulletproof.",2],
     ["Nothing. A winning streak doesn't make the next bet better.",3]]},
   {t:"patience", q:"It's a dead Tuesday in July. No football for weeks.", o:[
-    ["I find action anywhere. Table tennis, whatever's live.",0],
+    ["I'll find action anywhere — 3 a.m. Finnish floorball, whatever's live.",0],
     ["I'll bet a sport I barely follow just to have a sweat.",1],
     ["Mostly abstain, with a rare small one.",2],
     ["I don't bet. The off-season is for studying, not donating.",3]]}
