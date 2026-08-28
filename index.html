@@ -79,6 +79,9 @@
   .cta-note{font-family:var(--mono); font-size:11px; letter-spacing:.12em; color:var(--muted); margin:16px 0 22px;}
   .trust{display:flex; justify-content:center; flex-wrap:wrap; gap:26px; font-family:var(--mono); font-size:10px;
          letter-spacing:.16em; color:var(--green); margin-bottom:74px;}
+  .chips{display:flex; flex-wrap:wrap; justify-content:center; gap:12px; max-width:660px; margin:0 auto;}
+  .chip{display:inline-flex; align-items:center; gap:9px; border:1px solid rgba(245,242,236,.16); border-radius:999px;
+        padding:11px 22px; font-family:var(--mono); font-size:11px; letter-spacing:.14em; color:var(--muted);}
 
   .grid3{display:grid; grid-template-columns:repeat(3,1fr); gap:1px; background:rgba(245,242,236,.11);
          border:1px solid rgba(245,242,236,.11); margin-bottom:64px; text-align:left;}
@@ -262,67 +265,26 @@
 
 <!-- ================= LANDING ================= -->
 <div id="screen-intro">
-  <div class="ticker"><div class="ticker-track" id="ticker-track"></div></div>
-
   <div class="land">
-    <div style="padding:76px 0 0;">
+    <div style="padding:88px 0 110px;">
       <div class="eyebrow"><i></i><span>THE BETTOR PROFILE · NFL · CFB · NBA</span></div>
       <div id="refbadge-wrap"></div>
 
-      <h1>Know who you are before kickoff.</h1>
-      <p class="sub" style="margin-bottom:38px;">Every bettor has tendencies — how you size a play you love, what you do after a bad bet, and how long you can watch without forcing action. You can learn yours the expensive way mid-season, or take three minutes to <b style="color:var(--text); font-weight:700;">find your Bettor Profile before kickoff.</b></p>
+      <h1>What kind of bettor <span style="color:var(--gold)">are you?</span></h1>
+      <p class="sub" style="max-width:44ch; margin-bottom:42px;">Fifteen questions. Three minutes. One honest answer you probably won't see coming.</p>
 
-      <button class="btn" onclick="startQuiz()">Take The Quiz <span class="arr">→</span></button>
-      <div class="cta-note">15 QUESTIONS · 3 MINUTES · SIX SPECTRUMS</div>
-      <div class="trust"><span>✓ INSTANT RESULTS</span><span>✓ NOTHING TO SIGN UP FOR</span><span>✓ NO CARD, NO EMAIL WALL</span></div>
-    </div>
+      <button class="btn" onclick="startQuiz()">Find Out <span class="arr">→</span></button>
+      <div class="trust" style="margin:20px 0 64px;"><span>✓ FREE · NO SIGNUP · INSTANT RESULT</span></div>
 
-    <div style="font-family:var(--mono); font-size:10px; letter-spacing:.24em; color:#6B6660; margin-bottom:18px;">A FEW OF THE TENDENCIES THE QUIZ READS</div>
-    <div class="grid3">
-      <div>
-        <div class="kicker">TENDENCY 01 · TILT</div>
-        <div class="body15">Some bettors reload eleven minutes after a bad beat. Some close the app until Tuesday. Both are real. Only one of them is yours.</div>
+      <div class="chips">
+        <span class="chip">🎯 SNIPER</span>
+        <span class="chip">📈 GRINDER</span>
+        <span class="chip">🔥 CHASER</span>
+        <span class="chip">⚡ GUNSLINGER</span>
+        <span class="chip">📚 PROFESSOR</span>
+        <span class="chip">🎢 ROLLERCOASTER</span>
       </div>
-      <div>
-        <div class="kicker">TENDENCY 02 · SIZING</div>
-        <div class="body15">You can go 8-4 on the week and still finish red if the four losses were the big ones. Hit rate is loud. Sizing is what actually pays.</div>
-      </div>
-      <div>
-        <div class="kicker">TENDENCY 03 · VOLUME</div>
-        <div class="body15">Three genuine edges on a slate. Some people bet three. Some bet nine. Neither is wrong until you know which one you are.</div>
-      </div>
-    </div>
-
-    <div style="font-family:var(--mono); font-size:10px; letter-spacing:.24em; color:var(--gold); margin-bottom:18px;">WHAT YOU WALK AWAY WITH · FREE, INSTANT</div>
-    <div class="grid3" style="border-color:rgba(233,185,73,.3);">
-      <div>
-        <div class="kicker">01 · YOUR PROFILE</div>
-        <div class="body15">One of six bettor archetypes — a plain-language read on how you actually behave when money is on the game.</div>
-      </div>
-      <div>
-        <div class="kicker">02 · YOUR KRYPTONITE</div>
-        <div class="body15">The one or two tendencies most likely to cost you this season — each with a hard rule that fixes it.</div>
-      </div>
-      <div>
-        <div class="kicker">03 · YOUR GAME PLAN</div>
-        <div class="body15">Specific rules built for your profile and your weakest spectrum. No generic advice.</div>
-      </div>
-    </div>
-
-    <div class="measure">
-      <div class="measure-h"><div class="a">WHAT WE MEASURE · SIX SPECTRUMS</div><div class="b">UNSCORED</div></div>
-      <div class="measure-grid" id="measure-grid"></div>
-    </div>
-
-    <div class="quotewrap">
-      <div class="rule"></div>
-      <div class="quote"><span class="qm">“</span>The difference between dreams and reality is <b>the discipline to execute on the plan.</b><span class="qm">”</span></div>
-    </div>
-
-    <div class="closer">
-      <div class="lead">FIND OUT BEFORE THE SEASON TELLS YOU</div>
-      <button class="btn" onclick="startQuiz()">Take The Quiz <span class="arr">→</span></button>
-      <div class="foot">15 QUESTIONS · 3 MINUTES · NO SIGNUP</div>
+      <div style="font-family:var(--mono); font-size:10px; letter-spacing:.2em; color:var(--faint); margin-top:24px;">SIX PROFILES · ONE OF THEM IS YOURS</div>
     </div>
   </div>
 </div>
@@ -485,18 +447,6 @@ const QUESTIONS = [
     ["I don't bet. The off-season is for studying, not donating.",3]]}
 ];
 
-const TICKER = [
-  ["W","Breece Hall Over 69.5 · rush yds","+$1,500"],["W","Falcons +6 · spread","+$556"],
-  ["W","Bengals Over 20.5 · team total","+$1,028"],["W","Caleb Williams Over 11.5 · rush yds","+$1,696"],
-  ["L","D'Andre Swift Over 41.5 · rush yds","−$500"],["W","Florida State +24.5 · spread","+$2,025"],
-  ["W","Arizona ML · moneyline","+$1,500"],["W","Obi Toppin Over 17.5 · points","+$1,565"],
-  ["L","RJ Barrett Over 26.5 · points","−$750"],["W","California +2.5 · spread","+$1,833"],
-  ["W","Steelers +6.5 · spread","+$909"],["W","North Carolina +3.5 · spread","+$452"],
-  ["W","Ravens -3.5 · spread","+$909"],["W","Georgia Tech ML · moneyline","+$1,500"],
-  ["W","Pascal Siakam Over 26.5 · points","+$2,000"],["W","Tyrese Maxey Over 23.5 · points","+$1,120"],
-  ["W","3-Bet Parlay +275 · sgp","+$2,750"],["W","Shai Gilgeous-Alexander Over 2.5 · stl + blk","+$2,100"]
-];
-
 let idx = 0;
 let answers = new Array(QUESTIONS.length).fill(null);
 let refCode = "";
@@ -512,21 +462,6 @@ function skoolUrl(){ return refCode ? SKOOL_URL + "?ref=" + encodeURIComponent(r
 
 /* ---------- boot ---------- */
 (function init(){
-  const track = document.getElementById("ticker-track");
-  let run = "";
-  TICKER.forEach(t => {
-    run += '<div class="tick"><span class="' + (t[0]==="W"?"w":"l") + '">' + t[0] + '</span>' +
-           '<span>' + esc(t[1]) + '</span>' +
-           '<span style="color:' + (t[0]==="W"?GREEN:RED) + '">' + esc(t[2]) + '</span></div>';
-  });
-  track.innerHTML = '<div style="display:flex">' + run + '</div><div style="display:flex">' + run + '</div>';
-
-  let mg = "";
-  for (const t in TRAITS){
-    mg += '<div><div class="spec-top"><span>' + esc(TRAITS[t].lo) + '</span><span>' + esc(TRAITS[t].hi) + '</span></div><div class="spec-rail"></div></div>';
-  }
-  document.getElementById("measure-grid").innerHTML = mg;
-
   try {
     const p = new URLSearchParams(window.location.search).get("ref");
     refCode = (p || localStorage.getItem("dv_ref") || "").trim().toUpperCase();
