@@ -640,16 +640,11 @@ function finish(){
     h += '<div class="aff"><div>';
     h += '<div class="aff-h"><i></i><span>VAULT MEMBERS · AFFILIATE</span></div>';
     h += '<h2>Share your profile. Keep <span>40% recurring.</span></h2>';
-    h += '<p>Drop in your Skool affiliate code and it gets welded to your share link. Anyone who takes the quiz through you and joins the Vault pays you 40% — every month they stay.</p>';
+    h += '<p>Your Skool affiliate code gets welded to your share link. Anyone who takes the quiz through you and joins the Vault pays you 40% — every month they stay.</p>';
     h += '<div class="where">FIND IT IN SKOOL → SETTINGS → AFFILIATES</div>';
     h += '</div><div class="col">';
-    h += '<div class="aff-row"><input class="field-green" id="ref-input" placeholder="YOUR SKOOL CODE" value="' + esc(refCode) + '">' +
-         '<button class="btn-green" onclick="saveRef()">Lock In</button></div>';
-    h += '<div class="linknote">Don\'t know your Skool affiliate code? DM David.</div>';
-    h += '<div class="linkbox' + (refCode ? " live" : "") + '" id="link-box">' + esc(shareUrl().replace(/^https?:\/\//,"")) + '</div>';
-    h += '<div class="linknote" id="link-note"' + (refCode ? ' style="display:none"' : '') + '>Lock in your code to personalize this link.</div>';
-    h += '<button class="btn-copy' + (refCode ? " live" : "") + '" id="btn-copylink" onclick="copyLink()">' +
-         (refCode ? "COPY MY SHARE LINK" : "CODE REQUIRED") + '</button>';
+    h += '<a href="' + SKOOL_URL + '" target="_blank" rel="noopener" style="display:flex; align-items:center; justify-content:center; gap:10px; background:var(--green); color:#04160A; font-family:var(--display); font-size:14px; letter-spacing:.04em; text-transform:uppercase; padding:19px 28px; border-radius:999px; text-decoration:none;">DM David In Skool →</a>';
+    h += '<div class="linknote" style="text-align:center;">DM David inside the community — he\'ll set you up with your personal share link and the details.</div>';
     h += '</div></div>';
   }
 
@@ -669,30 +664,6 @@ function finish(){
   show("screen-results");
   window._lastResults = {s, a};
   if (!navigator.share) document.getElementById("btn-share").style.display = "none";
-}
-
-/* ---------- referral ---------- */
-function saveRef(){
-  const v = (document.getElementById("ref-input").value || "").trim().toUpperCase();
-  refCode = v;
-  try { localStorage.setItem("dv_ref", v); } catch(e){}
-  const box = document.getElementById("link-box");
-  box.textContent = shareUrl().replace(/^https?:\/\//,"");
-  box.classList.toggle("live", !!v);
-  document.getElementById("link-note").style.display = v ? "none" : "";
-  const btn = document.getElementById("btn-copylink");
-  btn.classList.toggle("live", !!v);
-  btn.textContent = v ? "COPY MY SHARE LINK" : "CODE REQUIRED";
-  const jv = document.getElementById("join-vault");
-  if (jv) jv.href = skoolUrl();
-}
-function copyLink(){
-  if (!refCode) return;
-  navigator.clipboard.writeText(shareUrl()).then(() => {
-    const b = document.getElementById("btn-copylink");
-    b.textContent = "LINK COPIED ✓";
-    setTimeout(() => b.textContent = "COPY MY SHARE LINK", 1800);
-  });
 }
 
 /* ---------- share ---------- */
