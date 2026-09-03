@@ -460,6 +460,53 @@ function shareUrl(){
 }
 function skoolUrl(){ return refCode ? SKOOL_URL + "?ref=" + encodeURIComponent(refCode) : SKOOL_URL; }
 function track(ev, data, email){ try { if (window.dvTrack) window.dvTrack(ev, data, email); } catch(e){} }
+
+/* ---------- primetime countdown (ET wall clock; rolls to next slot automatically) ---------- */
+const PT_SLOTS = [
+  {d:0, h:20, m:20, label:"SUNDAY NIGHT FOOTBALL"},
+  {d:1, h:20, m:15, label:"MONDAY NIGHT FOOTBALL"},
+  {d:4, h:20, m:15, label:"THURSDAY NIGHT FOOTBALL"}
+];
+function etNow(){ return new Date(new Date().toLocaleString("en-US", {timeZone:"America/New_York"})); }
+function ptNext(){
+  const now = etNow();
+  let best = null;
+  PT_SLOTS.forEach(s => {
+    const t = new Date(now);
+    t.setDate(now.getDate() + ((s.d - now.getDay() + 7) % 7));
+    t.setHours(s.h, s.m, 0, 0);
+    if (t <= now) t.setDate(t.getDate() + 7);
+    const prev = new Date(t); prev.setDate(prev.getDate() - 7);
+    const sinceKick = now - prev;
+    const cand = (sinceKick >= 0 && sinceKick < 4*3600*1000)
+      ? {when:prev, label:s.label, live:true}
+      : {when:t, label:s.label, live:false};
+    if (!best || (cand.live && !best.live) || (cand.live === best.live && cand.when < best.when)) best = cand;
+  });
+  return best;
+}
+function ptTick(){
+  try {
+    const els = document.querySelectorAll(".pt-timer");
+    if (!els.length) return;
+    const n = ptNext();
+    if (!n) return;
+    let html;
+    if (n.live){
+      html = '🏈 <span style="color:var(--gold)">' + n.label + ' IS LIVE RIGHT NOW</span> · THE VAULT IS ALREADY IN IT';
+    } else {
+      let s = Math.max(0, Math.floor((n.when - etNow()) / 1000));
+      const d = Math.floor(s/86400); s -= d*86400;
+      const hh = Math.floor(s/3600); s -= hh*3600;
+      const mm = Math.floor(s/60), ss = s - mm*60;
+      const p = x => (x<10?"0":"")+x;
+      const clock = (d>0 ? d + "D " : "") + p(hh) + ":" + p(mm) + ":" + p(ss);
+      html = '🏈 ' + n.label + ' KICKS OFF IN <span style="color:var(--gold)">' + clock + '</span> · DON\'T WATCH IT WITHOUT A PLAN';
+    }
+    els.forEach(el => { el.innerHTML = html; });
+  } catch(e){}
+}
+try { setInterval(ptTick, 1000); } catch(e){}
 function trialUrl(profileName){
   var slug = profileName.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
   return "https://dimesvault.com/pages/trial?src=quiz-" + slug +
@@ -580,7 +627,8 @@ function finish(){
   if (aud === "new" || aud === "pp"){
     h += '<div style="text-align:center; margin-top:40px;">' +
          '<a class="btn-sm" style="display:inline-flex; text-decoration:none;" href="' + trialHref + '" target="_blank" rel="noopener">' +
-         (aud === "pp" ? 'Join The Community →' : 'Join The Vault →') + '</a></div>';
+         (aud === "pp" ? 'Join The Community →' : 'Join The Vault →') + '</a>' +
+         '<div class="fineprint pt-timer" style="margin-top:12px;"></div></div>';
   }
 
   /* top */
@@ -641,7 +689,7 @@ function finish(){
     h += '<p>The framework behind <b>757 audited picks</b> and a <b>75% hit rate after halftime</b> — and the community running it live, every game day.</p>';
     h += '<div class="col">';
     h += '<a class="btn-sm" id="join-vault" href="' + trialHref + '" target="_blank" rel="noopener">Join The Vault Before Kickoff →</a>';
-    h += '<div class="fineprint">NFL WEEK 1 IS DAYS AWAY · DON\'T BRING LAST SEASON\'S HABITS INTO IT</div>';
+    h += '<div class="fineprint pt-timer"></div>';
     h += '</div></div>';
   } else if (aud === "pp"){
     h += '<div class="next"><div class="band-h">NEXT STEP</div>';
@@ -649,7 +697,7 @@ function finish(){
     h += '<p>The complete course, the tools, live Q&amp;As, and the Film Room — an online community built around one thing: leveling up.</p>';
     h += '<div class="col">';
     h += '<a class="btn-sm" href="' + trialHref + '" target="_blank" rel="noopener">Join The Community →</a>';
-    h += '<div class="fineprint">ONLINE COMMUNITY · LEVEL UP</div>';
+    h += '<div class="fineprint pt-timer"></div>';
     h += '</div></div>';
   }
 
@@ -682,6 +730,7 @@ function finish(){
   show("screen-results");
   window._lastResults = {s, a};
   if (!navigator.share) document.getElementById("btn-share").style.display = "none";
+  try { ptTick(); } catch(e){}
 
   /* tracking hooks — fail-silent, must never break the quiz */
   try {
