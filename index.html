@@ -455,10 +455,16 @@ let aud = "new";
 /* ---------- utils ---------- */
 function esc(s){ return String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c])); }
 function shareUrl(){
-  const base = window.location.origin + window.location.pathname;
-  return refCode ? base + "?ref=" + encodeURIComponent(refCode) : base;
+  const base = window.location.origin + window.location.pathname + "?src=quiz-share";
+  return refCode ? base + "&ref=" + encodeURIComponent(refCode) : base;
 }
 function skoolUrl(){ return refCode ? SKOOL_URL + "?ref=" + encodeURIComponent(refCode) : SKOOL_URL; }
+function track(ev, data, email){ try { if (window.dvTrack) window.dvTrack(ev, data, email); } catch(e){} }
+function trialUrl(profileName){
+  var slug = profileName.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+  return "https://dimesvault.com/pages/trial?src=quiz-" + slug +
+    (window.dvEmail ? "&email=" + encodeURIComponent(window.dvEmail) : "");
+}
 
 /* ---------- boot ---------- */
 (function init(){
@@ -559,7 +565,23 @@ function finish(){
 
   document.getElementById("hdr-status").textContent = "PROFILE COMPLETE";
 
+  track("engage", {
+    quiz: "bettor-profile",
+    profile: a.name,
+    discipline: s.discipline, patience: s.patience, process: s.process,
+    decisiveness: s.conviction, adaptability: s.adapt, tilt_control: s.tilt,
+    answered: QUESTIONS.length, completed: true
+  });
+  const trialHref = trialUrl(a.name);
+
   let h = '<div class="res">';
+
+  /* primary trial CTA — top placement */
+  if (aud === "new" || aud === "pp"){
+    h += '<div style="text-align:center; margin-top:40px;">' +
+         '<a class="btn-sm" style="display:inline-flex; text-decoration:none;" href="' + trialHref + '" target="_blank" rel="noopener">' +
+         (aud === "pp" ? 'Join The Community →' : 'Join The Vault →') + '</a></div>';
+  }
 
   /* top */
   h += '<div class="res-top"><div class="res-left">';
@@ -623,14 +645,14 @@ function finish(){
     h += '<input class="field" type="email" name="contact[email]" placeholder="you@email.com" required autocomplete="email" aria-label="Email address">';
     h += '<button class="btn-sm" type="submit">Send Me The Perfect Play →</button>';
     h += '<div class="fineprint">INSTANT DELIVERY · NO SPAM · UNSUBSCRIBE ANYTIME</div>';
-    h += '<a class="btn-outline sm" id="join-vault" href="' + skoolUrl() + '" target="_blank" rel="noopener">Join The Vault →</a>';
+    h += '<a class="btn-outline sm" id="join-vault" href="' + trialHref + '" target="_blank" rel="noopener">Join The Vault →</a>';
     h += '</form></div>';
   } else if (aud === "pp"){
     h += '<div class="next"><div class="band-h">NEXT STEP</div>';
     h += '<h2>Your profile is the diagnosis. The Vault is where you build the process.</h2>';
     h += '<p>The complete course, the tools, live Q&amp;As, and the Film Room — an online community built around one thing: leveling up.</p>';
     h += '<div class="col">';
-    h += '<a class="btn-sm" href="' + skoolUrl() + '" target="_blank" rel="noopener">Join The Community →</a>';
+    h += '<a class="btn-sm" href="' + trialHref + '" target="_blank" rel="noopener">Join The Community →</a>';
     h += '<div class="fineprint">ONLINE COMMUNITY · LEVEL UP</div>';
     h += '</div></div>';
   }
@@ -664,6 +686,31 @@ function finish(){
   show("screen-results");
   window._lastResults = {s, a};
   if (!navigator.share) document.getElementById("btn-share").style.display = "none";
+
+  /* tracking hooks — fail-silent, must never break the quiz */
+  try {
+    const resEl = document.getElementById("screen-results");
+    const profileName = a.name;
+    resEl.querySelectorAll("a, .actions button").forEach(function(el){
+      el.addEventListener("click", function(){
+        track("cta_click", {
+          text: (el.textContent || "").trim().slice(0, 120),
+          href: el.getAttribute("href") || "",
+          profile: profileName
+        });
+      });
+    });
+    const emailForm = resEl.querySelector("form");
+    if (emailForm){
+      emailForm.addEventListener("submit", function(){
+        try {
+          const inp = emailForm.querySelector('input[type="email"]');
+          const emailValue = inp ? inp.value.trim().toLowerCase() : "";
+          if (emailValue) track("identify", { via: "quiz_form", profile: profileName }, emailValue);
+        } catch(e){}
+      });
+    }
+  } catch(e){}
 }
 
 /* ---------- share ---------- */
@@ -692,6 +739,47 @@ function copyResults(){
     setTimeout(() => b.textContent = "COPY MY RESULT", 1600);
   });
 }
+</script>
+<script>
+(function () {
+  var TRACK = "https://ondrhnbbtcboqzahgtml.supabase.co/functions/v1/dv-track";
+  var PAGE  = "/quiz/bettor-profile";
+  var qs    = new URLSearchParams(location.search);
+
+  // dv_id MUST match ^dv_[A-Za-z0-9_-]{4,}$ or the collector drops the row.
+  var dv = null;
+  try { dv = localStorage.getItem("dv_id"); } catch (e) {}
+  if (!dv || !/^dv_[A-Za-z0-9_-]{4,}$/.test(dv)) {
+    dv = "dv_" + Math.random().toString(36).slice(2, 10) + Date.now().toString(36);
+    try { localStorage.setItem("dv_id", dv); } catch (e) {}
+  }
+
+  var SRC   = qs.get("src") || "quiz";          // e.g. email-2, broadcast-quiz, quiz-share
+  var EMAIL = (qs.get("email") || "").trim().toLowerCase() || null;
+
+  function send(ev, data, email) {
+    try {
+      var body = JSON.stringify({
+        dv_id: dv, ev: ev, page: PAGE, src: SRC,
+        email: (email || EMAIL || null), data: data || {}
+      });
+      if (navigator.sendBeacon) {
+        navigator.sendBeacon(TRACK, new Blob([body], { type: "text/plain" }));
+      } else {
+        fetch(TRACK, { method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: body, keepalive: true });
+      }
+    } catch (e) { /* tracking must never break the quiz */ }
+  }
+
+  window.dvTrack = send;
+  window.dvEmail = EMAIL;
+  window.dvSrc   = SRC;
+
+  send("view", { step: "quiz_start" });
+  if (EMAIL) send("identify", { via: "url" }, EMAIL);
+})();
 </script>
 </body>
 </html>
